@@ -9,14 +9,12 @@ class BookListParse(object):
 
     def __init__(self):
         pass
+        self.index = 0
 
     def start(self, html):
-        if True:
-            raise NeedNextUrl("出错啦")
+        self.index += 1
+        print html
+        if self.index > 10:
+            self.index = 0
+            raise NeedNextUrl("进入下一页")
         pass
-
-dd = BookListParse()
-try:
-    print dd.start("")
-except NeedNextUrl,e:
-    print e

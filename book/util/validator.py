@@ -1,6 +1,4 @@
 # -*- coding: utf-8 -*-
-from urllib2 import HTTPError
-
 import requests
 import telnetlib
 import time
@@ -13,10 +11,12 @@ def checkProxyIp_1(ip='', port='', connect_url=''):
     :param port:
     :param connect_url: 测试连接地址
     :return:
+    测试路径http://wwww.baidu.com
     """
     try:
         start_time = time.time()
-        requests.get(connect_url, proxies={"http": "http://%s:%s" % (ip, port)}, timeout=5)
+        requests.get(connect_url, proxies={"http": "http://%s:%s" % (ip, port)
+                                        , "https": "http://%s:%s" % (ip, port)}, timeout=5)
         back_time = time.time() - start_time
     except:
         return False
@@ -30,6 +30,7 @@ def checkProxyIp_2(ip, port):
     :param ip:
     :param port:
     :return:
+    测试路径http://wwww.baidu.com
     """
     try:
         start_time = time.time()
@@ -39,21 +40,3 @@ def checkProxyIp_2(ip, port):
         return False
     else:
         return True
-
-
-user_agent = "Mozilla/4.0 (compatible; MSIE 6.0; Windows NT 5.1; SV1; AcooBrowser; .NET CLR 1.1.4322; .NET CLR 2.0.50727)"
-proxies = {
-  "http": "http://10.10.1.10:3128",
-  "https": "http://10.10.1.10:1080",
-}
-try:
-    response = requests.get('https://book.douban.com/tag/%E5%B0%8F%E8%AF%B4?start=20&type=T',proxies=proxies,headers={"User-Agent": user_agent}, timeout=5)
-    print response.text
-except requests.exceptions.ConnectTimeout,e:
-    print "超时"
-
-
-
-# 随机user_agent
-
-# 判断代理
