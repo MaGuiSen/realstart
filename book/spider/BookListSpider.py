@@ -70,7 +70,7 @@ class BookListSpider(object):
                     BookListParse().start(url, response.text)
             else:
                 print "没有ip了，等", "不改变参数"
-                self.exceptionOperate_1()
+                raise requests.exceptions.ProxyError("")
         except requests.exceptions.ConnectTimeout, e:
             print "服务器连接超时", "不改变参数"
             self.exceptionOperate_1()
@@ -107,7 +107,8 @@ class BookListSpider(object):
         if not self.ipValid:
             # 从数据库取出IP
             # 先判断是否需要代理 一个字段
-            self.ipValid = self.ipDao.getOneIp()
+            # TODO 这里的IpDao使用对象的形式，不懂为什么会出现缓存问题，就是一直select都是空数组
+            self.ipValid = IPDao().getOneIp()
             if self.ipValid:
                 print "新的ip:", self.ipValid
             else:
