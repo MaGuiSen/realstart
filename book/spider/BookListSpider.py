@@ -20,8 +20,8 @@ class BookListSpider(object):
         self.needChangeParams = True  # 是否需要更换参数，在服务器异常的时候不需要更换，保持原有参数
         pass
 
-    def start(self):
-        urls = Constant.CHANNEL.split()
+    def start(self, urls):
+        # urls = ["https://book.douban.com/tag/轻小说"]
         for url in urls:
             # 重置参数
             print "重置"

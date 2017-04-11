@@ -3,15 +3,16 @@ import random
 import requests
 
 from book import Constant
-from book.parse.IpParse import IpParse
+from book.parse.IpParse_3 import IpParse_3
+from selenium import webdriver
 
 
-class IpSpider(object):
+class IpSpider_3(object):
     def __init__(self):
         pass
 
-    def start(self):
-        self.request("http://www.xicidaili.com/")
+    def start(self, url):
+        self.request(url)
         pass
 
     def request(self, url):
@@ -23,12 +24,12 @@ class IpSpider(object):
 
             req_code = response.status_code
             if req_code >= 400:
-                print "返回状态错误",req_code
+                print "返回状态错误", req_code
             else:
                 print "请求通过"
-                print "IpSpider 开始解析"
+                print "开启IP3抓取 开始解析"
                 # 解析文档
-                IpParse().start(response.text)
+                IpParse_3().start(response.text)
         except requests.exceptions.ConnectTimeout, e:
             print "超時"
         except requests.exceptions.ProxyError, e:
