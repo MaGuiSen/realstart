@@ -21,12 +21,10 @@ class Log(object):
         self.save("bookListSpider", msgDict)
 
     def saveBookTagPageIndex(self, pageIndex):
-        """
-        :param msgDict: [urlBase,urlParams,currPage]
-        :return:
-        """
         self.save("bookTagPageIndex", {"pageIndex":pageIndex})
 
+    def saveBookDetailIndexLog(self, detailIndex):
+        self.save("bookDetailIndex", {"detailIndex": detailIndex})
 
     def getBookListLog(self):
         with open(os.path.join(os.path.dirname(__file__) + "/file/bookListSpider.json"), 'r') as load_f:
@@ -34,4 +32,8 @@ class Log(object):
 
     def getBookTagLog(self):
         with open(os.path.join(os.path.dirname(__file__) + "/file/bookTagPageIndex.json"), 'r') as load_f:
+            return json.load(load_f)
+
+    def getBookDetailIndexLog(self):
+        with open(os.path.join(os.path.dirname(__file__) + "/file/bookDetailIndex.json"), 'r') as load_f:
             return json.load(load_f)
