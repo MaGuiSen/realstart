@@ -20,9 +20,9 @@ USER_AGENTS = [
     "Opera/9.80 (Macintosh; Intel Mac OS X 10.6.8; U; fr) Presto/2.9.168 Version/11.52",
 ]
 
-
-a = u"""
-https://book.douban.com/tag/小说
+# 已经抓过书籍列表了
+CHANNEL_ALREADY_CATCH = u"""
+      https://book.douban.com/tag/小说
       https://book.douban.com/tag/外国文学
       https://book.douban.com/tag/文学
       https://book.douban.com/tag/随笔
@@ -159,8 +159,6 @@ https://book.douban.com/tag/小说
       https://book.douban.com/tag/web安全
 """
 
-
 # 图书的基础链接
 CHANNEL = u'''
-       https://book.douban.com/tag/web安全
      '''

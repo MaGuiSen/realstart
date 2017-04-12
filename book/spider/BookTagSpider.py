@@ -7,12 +7,12 @@ import time
 
 from book import Global, Constant
 from book.db.IPDao import IPDao
-from book.parse.BookListParse import BookListParse
-from book.ExceptionSelf import NeedNextUrl
+from book.db.BookTagDao import BookTagDao
+from book.parse.BookTagParse import BookTagParse
 from book.log.Log import Log
 
 
-class BookListSpider(object):
+class BookTagSpider(object):
     def __init__(self):
         self.needNextUrl = False
         self.ipValid = None
@@ -20,38 +20,37 @@ class BookListSpider(object):
         self.ipDao = IPDao()
         self.log = Log()
         self.needChangeParams = True  # 是否需要更换参数，在服务器异常的时候不需要更换，保持原有参数
+        self.bookTagDao = BookTagDao()
         pass
 
-    def start(self, urls):
-        # urls = ["https://book.douban.com/tag/轻小说"]
-        for url in urls:
-            # 重置参数
-            print "重置"
-            self.log.saveBookListLog({"urlBase":url})
-            self.needNextUrl = False
-            self.currPage = 0
-            while not self.needNextUrl:
-                try:
-                    # 组装参数
-                    urlWithParams = url + "?start={}&type=T".format(str(self.currPage * 20))
-                    self.log.saveBookListLog({"urlBase": url, "urlParams": urlWithParams, "currPage": self.currPage})
-                    print "新的请求+组装参数:"
-                    print urlWithParams
-                    self.request(urlWithParams)
-                    # 请求完 +1
-                    if self.needChangeParams:
-                        self.currPage += 1
-                    self.needChangeParams = True  # 用完记住复原
-                    # 随机睡眠
-                    time.sleep(int(format(random.randint(0, 9))))
-                except NeedNextUrl, e:
-                    print "捕获到" + e.message
-                    self.needNextUrl = True
-        print "抓取结束啦"
+    def start(self):
+        # 从数据库内循环取出一个几个类型，然后请求
+        isEnd = False
+        tagLogDict = self.log.getBookTagLog() or {}
+        pageIndex = tagLogDict['pageIndex'] or 1
+        while not isEnd:
+            print "-----------------当前第", pageIndex, "页----------------------"
+            self.log.saveBookTagPageIndex(pageIndex)
+            tags = self.bookTagDao.getPageTags(pageIndex, 10)
+            index = 0
+            tag = ""
+            while index < len(tags):
+                tag = tags[index]
+                print "https://book.douban.com/tag/" + tag[0]
+                # 随机睡眠
+                time.sleep(int(format(random.randint(0, 5))))
+                self.request("https://book.douban.com/tag/" + tag[0])
+                if self.needChangeParams:
+                    index += 1
+                self.needChangeParams = True
+            pageIndex += 1
+            isEnd = (len(tags) < 10)
+            if isEnd:
+                print "book tag 取值结束"
+                break
 
     def request(self, url):
         user_agent = random.choice(Constant.USER_AGENTS)
-        response = None
         try:
             self.checkIP()
             if self.ipValid:
@@ -67,9 +66,10 @@ class BookListSpider(object):
                     print "返回状态错误", req_code
                     self.exceptionOperate_1()
                 else:
+                    print "请求通过"
                     print "开始解析"
                     # 解析文档
-                    BookListParse().start(url, response.text)
+                    BookTagParse().start(response.text)
             else:
                 print "没有ip了，等", "不改变参数"
                 raise requests.exceptions.ProxyError("")
@@ -94,8 +94,6 @@ class BookListSpider(object):
         except requests.exceptions.HTTPError, e:
             print "读取超时", "不改变参数"
             self.exceptionOperate_1()
-        else:
-            print "请求通过"
 
     def exceptionOperate_1(self):
         """
