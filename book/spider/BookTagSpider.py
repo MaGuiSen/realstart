@@ -36,10 +36,11 @@ class BookTagSpider(object):
             tag = ""
             while index < len(tags):
                 tag = tags[index]
-                print "https://book.douban.com/tag/" + tag[0]
-                # 随机睡眠
-                time.sleep(int(format(random.randint(0, 5))))
-                self.request("https://book.douban.com/tag/" + tag[0])
+                if "/" not in tag:
+                    print "https://book.douban.com/tag/" + tag[0]
+                    # 随机睡眠
+                    time.sleep(int(format(random.randint(0, 5))))
+                    self.request("https://book.douban.com/tag/" + tag[0])
                 if self.needChangeParams:
                     index += 1
                 self.needChangeParams = True
@@ -63,8 +64,11 @@ class BookTagSpider(object):
                 req_msg = response.reason
                 print "返回状态 ", req_code, " 返回状态消息 ", req_msg
                 if req_code >= 400:
-                    print "返回状态错误", req_code
-                    self.exceptionOperate_1()
+                    if req_code == 404:
+                        print "没有本页资源"
+                    else:
+                        print "返回状态错误", req_code
+                        self.exceptionOperate_1()
                 else:
                     print "请求通过"
                     print "开始解析"

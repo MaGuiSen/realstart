@@ -26,6 +26,6 @@ class BookTagParse(object):
                 item['tag_name'] = tag_name
                 item['already_catch'] = 0
                 print tag_name
-                if tag_name and not self.bookTagDao.checkExist(tag_name):
+                if tag_name and "/" not in tag_name and not self.bookTagDao.checkExist(tag_name):
                     print "抓取保存的tag数据:", tag_name
                     self.bookTagDao.save(item)
