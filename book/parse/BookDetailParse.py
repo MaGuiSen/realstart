@@ -21,6 +21,10 @@ class BookDetailParse(object):
         if self.bookDetailDao.checkExist(book_id):
             return
         soup = BeautifulSoup(html, "lxml")
+        book_name = soup.select("title")
+        if book_name and len(book_name) > 0:
+            book_name = book_name[0].get_text().replace(u"(豆瓣)", "")
+        print "书名：", book_name
         main_info = soup.select("div.grid-16-8 #info")  # 主要的信息
         if main_info and len(main_info) > 0:
             main_info = main_info[0]
@@ -141,6 +145,7 @@ class BookDetailParse(object):
         congshuxinxi = congshuDetail or ""
         print "丛书信息：", congshuxinxi
         item = {}
+        item['book_name'] = book_name or ''
         item['main_info'] = main_info or ''
         item['img_douban'] = img_douban or ''
         item['img_self'] = img_self or ''

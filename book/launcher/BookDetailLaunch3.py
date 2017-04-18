@@ -1,5 +1,5 @@
 # -*- coding: utf-8 -*-
-from book.spider.BookDetailSpider import BookDetailSpider
+from book.spider.BookDetailSpider3 import BookDetailSpider3
 class BookLaunch(object):
     """
     """
@@ -12,7 +12,7 @@ class BookLaunch(object):
 
         #1000001 从这里开始
         print "开启BookDetail抓取"
-        BookDetailSpider().start()
+        BookDetailSpider3().start()
 
 
 BookLaunch().start()

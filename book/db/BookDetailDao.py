@@ -30,20 +30,23 @@ class BookDetailDao(object):
     def save(self, item):
         cursor = self.connector.cursor()
         sql_query = """insert into book_detail
-        (main_info,img_douban,img_self,score,mulus,tags,neirongjianjie,zuozhejianjie,congshuxinxi,source_url,book_id)
-         values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
+        (book_name,main_info,img_douban,img_self,score,mulus,tags,neirongjianjie,zuozhejianjie,congshuxinxi,source_url,book_id)
+         values (%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s,%s)"""
 
-        item = (item['main_info'],
-        item['img_douban'] ,
-        item['img_self'],
-        item['score'],
-        item['mulus'] ,
-        item['tags'],
-        item['neirongjianjie'],
-        item['zuozhejianjie'],
-        item['congshuxinxi'] ,
-        item['source_url'],
-        item['book_id'])
+        item = (
+            item['book_name'],
+            item['main_info'],
+            item['img_douban'] ,
+            item['img_self'],
+            item['score'],
+            item['mulus'] ,
+            item['tags'],
+            item['neirongjianjie'],
+            item['zuozhejianjie'],
+            item['congshuxinxi'] ,
+            item['source_url'],
+            item['book_id']
+        )
         cursor.execute(sql_query, item)
         cursor.close()
         self.connector.commit()

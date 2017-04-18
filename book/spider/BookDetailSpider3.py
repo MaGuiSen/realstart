@@ -12,7 +12,7 @@ from book.parse.BookDetailParse import BookDetailParse
 from book.util.GetIpFromXici import GetIpFromXici
 
 
-class BookDetailSpider(object):
+class BookDetailSpider3(object):
     def __init__(self):
         self.needNextUrl = False
         self.ipValid = None
@@ -25,14 +25,14 @@ class BookDetailSpider(object):
         pass
 
     def start(self):
-        detailIndexLogDict = self.log.getBookDetailIndexLog() or {}
-        index = detailIndexLogDict['detailIndex'] or 1
+        detailIndexLogDict = self.log.getBookDetailIndexLog3() or {}
+        index = detailIndexLogDict['detailIndex'] or 3000001
         while True:
             print "-----------------当前第", index, "条----------------------"
-            if index >= 2000001:
-                print "-----------------到达第", 2000001, "条----------------------"
+            if index >= 4000001:
+                print "-----------------到达第", 4000001, "条----------------------"
                 break
-            self.log.saveBookDetailIndexLog(index)
+            self.log.saveBookDetailIndexLog3(index)
             url = "https://book.douban.com/subject/%s/" % (index, )
             print url
             self.request(url, index)
@@ -106,16 +106,16 @@ class BookDetailSpider(object):
             # 从数据库取出IP
             # 先判断是否需要代理 一个字段
             # TODO 这里的IpDao使用对象的形式，不懂为什么会出现缓存问题，就是一直select都是空数组
-            # self.ipValid = IPDao().getOneIp()
-            # if self.ipValid:
-            #     print "新的ip:", self.ipValid
-            # else:
-            #     print "数据库中没有新的IP"
-            self.ipValid = self.getIpFromXici.getIp()
+            self.ipValid = IPDao().getOneIp()
             if self.ipValid:
                 print "新的ip:", self.ipValid
             else:
-                print "没有新的IP"
+                print "数据库中没有新的IP"
+            # self.ipValid = self.getIpFromXici.getIp()
+            # if self.ipValid:
+            #     print "新的ip:", self.ipValid
+            # else:
+            #     print "没有新的IP"
 
 
 #

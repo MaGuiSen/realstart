@@ -37,3 +37,16 @@ class Log(object):
     def getBookDetailIndexLog(self):
         with open(os.path.join(os.path.dirname(__file__) + "/file/bookDetailIndex.json"), 'r') as load_f:
             return json.load(load_f)
+
+    def saveBookDetailIndexLog2(self, detailIndex):
+        self.save("bookDetailIndex2", {"detailIndex": detailIndex})
+    def getBookDetailIndexLog2(self):
+        with open(os.path.join(os.path.dirname(__file__) + "/file/bookDetailIndex2.json"), 'r') as load_f:
+            return json.load(load_f)
+
+    def saveBookDetailIndexLog3(self, detailIndex):
+        self.save("bookDetailIndex3", {"detailIndex": detailIndex})
+
+    def getBookDetailIndexLog3(self):
+        with open(os.path.join(os.path.dirname(__file__) + "/file/bookDetailIndex3.json"), 'r') as load_f:
+            return json.load(load_f)

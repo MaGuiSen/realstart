@@ -12,7 +12,7 @@ from book.parse.BookDetailParse import BookDetailParse
 from book.util.GetIpFromXici import GetIpFromXici
 
 
-class BookDetailSpider(object):
+class BookDetailSpider2(object):
     def __init__(self):
         self.needNextUrl = False
         self.ipValid = None
@@ -25,14 +25,14 @@ class BookDetailSpider(object):
         pass
 
     def start(self):
-        detailIndexLogDict = self.log.getBookDetailIndexLog() or {}
-        index = detailIndexLogDict['detailIndex'] or 1
+        detailIndexLogDict = self.log.getBookDetailIndexLog2() or {}
+        index = detailIndexLogDict['detailIndex'] or 2000001
         while True:
             print "-----------------当前第", index, "条----------------------"
-            if index >= 2000001:
-                print "-----------------到达第", 2000001, "条----------------------"
+            if index >= 3000001:
+                print "-----------------到达第", 3000001, "条----------------------"
                 break
-            self.log.saveBookDetailIndexLog(index)
+            self.log.saveBookDetailIndexLog2(index)
             url = "https://book.douban.com/subject/%s/" % (index, )
             print url
             self.request(url, index)

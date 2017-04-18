@@ -52,5 +52,15 @@ from book import Constant
 #         except Exception,e:
 #             print self.book_id, "图片下载出错", self.loadUrl
 
-print u"""
- 　　上海史研究译丛(共13册),这套丛书还有《移民企业家》,《近代上海的公共性与国家》,《苏北人在上海，1850-1980》,《上海歹土》,《魔都上海》等。""".replace(u"\n","").replace(u" ","").strip(u"　")
+# print len(u"""
+#
+#  　　""")
+#
+# dds = [u"目录"]
+# total = 0
+# for dd in dds:
+#     total+=len(dd)
+# print total
+
+fileResponse = requests.get("http://www.swei360.com/")
+print fileResponse.content

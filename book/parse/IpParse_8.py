@@ -4,7 +4,7 @@ from book.db.IPDao import IPDao
 from book.util.validator import checkProxyIp_1
 
 
-class IpParse_4(object):
+class IpParse_8(object):
     """
     """
     def __init__(self):
@@ -15,15 +15,13 @@ class IpParse_4(object):
     def start(self, html):
         page = BeautifulSoup(html, 'lxml')
         ipItem = {}
-        ipTrs = page.select('#main tbody tr')
+        ipTrs = page.select('tbody tr')
         for ipTr in ipTrs:
             ipTds = ipTr.select('td')
             ipItem['ip'] = ipTds[0].get_text()
             ipItem['port'] = ipTds[1].get_text()
-            ipItem['address'] = ipTds[2].get_text()
-            ipItem['ip_type'] = "http"
-            if ipItem['ip'] == "ip":
-                continue
+            ipItem['address'] = ipTds[5].get_text()
+            ipItem['ip_type'] = ipTds[3].get_text()
             # 验证存在是否
             is_exist = self.ipDao.checkIpExist(ipItem['ip'], ipItem['port'])
             if is_exist:
@@ -33,6 +31,6 @@ class IpParse_4(object):
             if not is_useful:
                 continue
             # 存到数据库
-            print "开启IpSpider_4抓取抓取有效IP:", ipItem['ip'], ipItem['port']
+            print "开启IpSpider_8抓取抓取有效IP:", ipItem['ip'], ipItem['port']
             self.ipDao.save(ipItem)
         pass
