@@ -26,7 +26,7 @@ class ThreadInput(threading.Thread):
 class BookDetailThreadLaunch(object):
     def __init__(self):
         self.threadList = []
-        self.threadMaxSize = 10
+        self.threadMaxSize = 25
         self.log = Log()
 
     def start(self):

@@ -56,7 +56,7 @@ class BookDetailSpiderThread(threading.Thread):
         user_agent = random.choice(Constant.USER_AGENTS)
         try:
             self.checkIP()
-            if self.ipValid:
+            if self.ipValid and len(self.ipValid) >= 2:
                 proxies = {"http": "http://%s:%s" % self.ipValid, "https": "http://%s:%s" % self.ipValid}
                 print str(book_id) + u">代理" + str(proxies)
                 response = requests.get(url, proxies=proxies,
@@ -77,6 +77,7 @@ class BookDetailSpiderThread(threading.Thread):
                     self.bookDetailDao.start(response.text, url, book_id)
             else:
                 print str(book_id) + u">消息:没有ip了,不改变参数",""
+                self.ipValid = None;
                 raise requests.exceptions.ProxyError("")
         except mysql.connector.errors.InterfaceError, e:
             print str(book_id) + ">" + u"消息:数据库连接出问题,不改变参数"
@@ -121,13 +122,13 @@ class BookDetailSpiderThread(threading.Thread):
             #     print "新的ip:", self.ipValid
             # else:
             #     print "数据库中没有新的IP"
-            self.ipValid = self.getIpFromXici.getIp()
-            if self.ipValid:
+            if self.bookId % 5 == 0:
+                self.ipValid = self.getIpFromXici.getIp()
+            else:
+                self.ipValid = IPDao().getOneIp()
+
+            if self.ipValid and len(self.ipValid) >= 2:
                 print str(self.bookId) + u">新的ip:", self.ipValid
             else:
+                self.ipValid = None
                 print str(self.bookId) + u">没有新的IP"
-
-
-                #
-                # book =BookListSpider()
-                # book.request("https://book.douban.com/tag/小说?start=760&type=T")
