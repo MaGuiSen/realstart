@@ -30,28 +30,29 @@ class BookDetailThreadLaunch(object):
         self.log = Log()
 
     def start(self):
+        # 启动输入线程
         inputThread = ThreadInput()
         inputThread.start()
-
         self.spiderBookDetail()
         pass
 
     def spiderBookDetail(self):
+        bookDetailJson = self.log.getBookDetailThreadLaunchIndex() or {}
+        bookId = bookDetailJson['detailIndex'] or 4000000
         while True:
             self.checkNeedAddThread()
             while not Global.consoleToStopCatch and len(self.threadList) <= self.threadMaxSize:
-                bookDetailJson = self.log.getBookDetailThreadLaunchIndex() or {}
-                bookId = bookDetailJson['detailIndex'] or 4000000
-                self.log.saveBookDetailThreadLaunchIndex(bookId)
-                thread_ = BookDetailSpiderThread("",bookId)
+                print bookId
+                thread_ = BookDetailSpiderThread(bookId)
                 thread_.start()
-                print 'add', bookId
                 self.threadList.append(thread_)
+                bookId += 1
+                self.log.saveBookDetailThreadLaunchIndex(bookId)
 
     def checkNeedAddThread(self):
         for currThread in self.threadList:
             if not currThread.isAlive():
-                print "dead", currThread.bookId
+                print "dead:" + str(currThread.bookId)
                 self.threadList.remove(currThread)
         # 看还需要增加几个
         return self.threadMaxSize - len(self.threadList)

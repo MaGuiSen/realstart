@@ -26,7 +26,7 @@ class IpLaunch(object):
         Timer(1, self.spiderIp_4).start()
         Timer(1, self.spiderIp_5).start()
         Timer(1, self.spiderIp_6).start()
-        Timer(1, self.spiderIp_7).start()
+        # Timer(1, self.spiderIp_7).start()
         # Timer(1, self.spiderIp_8).start()
 
     def spiderIp(self):

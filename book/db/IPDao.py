@@ -32,7 +32,7 @@ class IPDao(object):
         cursor.execute(sql_del, (ip, port))
         self.connector.commit()
         cursor.close()
-        print '删除无效的IP', ip, port
+        print u'删除无效的IP', ip, port
 
     def checkIpExist(self, ip, port):
         cursor = self.connector.cursor()

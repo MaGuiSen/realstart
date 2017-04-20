@@ -57,7 +57,7 @@ class BookCatchRecordDao(object):
         cursor.execute(sql_del, (bookId, ))
         self.connector.commit()
         cursor.close()
-        print '删除', bookId
+        print u'删除抓取状态的bookId:', bookId
 
     def deleteByUrl(self, url):
         cursor = self.connector.cursor()
@@ -65,4 +65,4 @@ class BookCatchRecordDao(object):
         cursor.execute(sql_del, (url, ))
         self.connector.commit()
         cursor.close()
-        print '删除', url
+        print u'删除抓取状态的url:', url

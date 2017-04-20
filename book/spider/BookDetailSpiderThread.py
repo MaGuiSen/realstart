@@ -16,7 +16,7 @@ from book.util.GetIpFromXici import GetIpFromXici
 
 
 class BookDetailSpiderThread(threading.Thread):
-    def __init__(self, url, bookId):
+    def __init__(self, bookId):
         threading.Thread.__init__(self)
         self.needNextUrl = False
         self.ipValid = None
@@ -28,12 +28,10 @@ class BookDetailSpiderThread(threading.Thread):
         self.getIpFromXici = GetIpFromXici()
         self.bookCatchRecordDao = BookCatchRecordDao()
         self.bookId = bookId
-        self.url = url
         pass
 
     def run(self):
         while not Global.consoleToStopCatch:
-            print "-------当前第", self.bookId, "条----------------------"
             # 记录抓第几条
             url = "https://book.douban.com/subject/%s/" % (self.bookId,)
             catchRecordItem = {
@@ -41,9 +39,9 @@ class BookDetailSpiderThread(threading.Thread):
                 'url': url,
                 'catch_status': 'catching',
             }
+            print str(self.bookId) + ">" + url
             if not self.bookCatchRecordDao.checkExist(self.bookId):
                 self.bookCatchRecordDao.save(catchRecordItem)
-            print catchRecordItem
             self.request(url, self.bookId)
             time.sleep(int(format(random.randint(0, 1))))
             if self.canOverCatch:
@@ -52,7 +50,7 @@ class BookDetailSpiderThread(threading.Thread):
                 self.bookCatchRecordDao.deleteById(self.bookId)
                 break
             self.canOverCatch = True
-        print "-------当前第", self.bookId, "条---success-", url
+        print "success>" + str(self.bookId) + ">" + url
 
     def request(self, url, book_id):
         user_agent = random.choice(Constant.USER_AGENTS)
@@ -60,47 +58,46 @@ class BookDetailSpiderThread(threading.Thread):
             self.checkIP()
             if self.ipValid:
                 proxies = {"http": "http://%s:%s" % self.ipValid, "https": "http://%s:%s" % self.ipValid}
-                print proxies
+                print str(book_id) + u">代理" + str(proxies)
                 response = requests.get(url, proxies=proxies,
                                         headers={"User-Agent": user_agent},
                                         timeout=10)
                 req_code = response.status_code
                 req_msg = response.reason
-                print "返回状态 ", req_code, " 返回状态消息 ", req_msg
                 if req_code >= 400:
                     if req_code == 404:
-                        print "没有本页资源"
+                        print str(book_id) + ">" + u"状态:" + str(req_code) + "," + u"消息:" + req_msg + "," + u"没有本页资源"
+                        print
                     else:
-                        print "返回状态错误", req_code
+                        print str(book_id) + ">" + u"状态:" + str(req_code) + "," + u"消息:" + req_msg + "," + u"返回状态错误"
                         self.exceptionOperate_1()
                 else:
-                    print "请求通过"
-                    print "开始解析"
+                    print str(book_id) + ">" + u"状态:" + str(req_code) + "," + u"消息:" + req_msg + "," + u"开始解析"
                     # 解析文档
                     self.bookDetailDao.start(response.text, url, book_id)
             else:
-                print "没有ip了，等", "不改变参数"
+                print str(book_id) + u">消息:没有ip了,不改变参数",""
                 raise requests.exceptions.ProxyError("")
         except mysql.connector.errors.InterfaceError, e:
-            print "数据库连接出问题", "不改变参数"
+            print str(book_id) + ">" + u"消息:数据库连接出问题,不改变参数"
             self.exceptionOperate_1()
         except requests.exceptions.ConnectTimeout, e:
-            print "服务器连接超时", "不改变参数"
+            print str(book_id) + ">" + u"消息:服务器连接超时,不改变参数"
             self.exceptionOperate_1()
         except requests.exceptions.ProxyError, e:
-            print "代理服务器有问题", "不改变参数"
+            print str(book_id) + ">" + u"消息:代理服务器有问题,不改变参数"
             self.exceptionOperate_1()
         except requests.exceptions.ConnectionError, e:
-            print "链接出错", "不改变参数"
+            print str(book_id) + ">" + u"消息:链接出错,不改变参数"
             self.exceptionOperate_1()
         except requests.exceptions.ReadTimeout, e:
-            print "读取超时", "不改变参数"
+            print str(book_id) + ">" + u"消息:读取超时,不改变参数"
             self.exceptionOperate_1()
         except requests.exceptions.Timeout, e:
-            print "读取超时", "不改变参数"
+            print str(book_id) + ">" + u"消息:读取超时,不改变参数"
             self.exceptionOperate_1()
         except requests.exceptions.HTTPError, e:
-            print "读取超时", "不改变参数"
+            print str(book_id) + ">" + u"消息:读取超时,不改变参数"
             self.exceptionOperate_1()
 
     def exceptionOperate_1(self):
@@ -126,9 +123,9 @@ class BookDetailSpiderThread(threading.Thread):
             #     print "数据库中没有新的IP"
             self.ipValid = self.getIpFromXici.getIp()
             if self.ipValid:
-                print "新的ip:", self.ipValid
+                print str(self.bookId) + u">新的ip:", self.ipValid
             else:
-                print "没有新的IP"
+                print str(self.bookId) + u">没有新的IP"
 
 
                 #

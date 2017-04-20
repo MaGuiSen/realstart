@@ -52,7 +52,7 @@ class Log(object):
             return json.load(load_f)
 
     def saveBookDetailThreadLaunchIndex(self, detailIndex):
-        self.save("bookDetailThreadLaunchIndex.json", {"detailIndex": detailIndex})
+        self.save("bookDetailThreadLaunchIndex", {"detailIndex": detailIndex})
 
     def getBookDetailThreadLaunchIndex(self):
         with open(os.path.join(os.path.dirname(__file__) + "/file/bookDetailThreadLaunchIndex.json"), 'r') as load_f:
