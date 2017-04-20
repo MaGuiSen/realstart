@@ -64,20 +64,20 @@ from book import Constant
 
 # fileResponse = requests.get("http://www.swei360.com/")
 # print fileResponse.content
-
-def get():
-    a = 1
-    b = 2
-    print "ddd"
-    while a < 10:
-        yield a
-        a += 1
-        print "ccc"
-    b = 1111
-    print b
-
-for z in get():
-    print 11
-    print z
+#
+# def get():
+#     a = 1
+#     b = 2
+#     print "ddd"
+#     while a < 10:
+#         yield a
+#         a += 1
+#         print "ccc"
+#     b = 1111
+#     print b
+#
+# for z in get():
+#     print 11
+#     print z
 
     

@@ -7,11 +7,12 @@ import mysql
 import requests
 
 from book import Constant
+from book import Global
+from book.db.BookCatchRecordDao import BookCatchRecordDao
 from book.db.IPDao import IPDao
 from book.log.Log import Log
 from book.parse.BookDetailParse import BookDetailParse
 from book.util.GetIpFromXici import GetIpFromXici
-from book.db.BookCatchRecordDao import BookCatchRecordDao
 
 
 class BookDetailSpiderThread(threading.Thread):
@@ -31,10 +32,10 @@ class BookDetailSpiderThread(threading.Thread):
         pass
 
     def run(self):
-        while True:
+        while not Global.consoleToStopCatch:
             print "-------当前第", self.bookId, "条----------------------"
             # 记录抓第几条
-            url = "https://book.douban.com/subject/%s/" % (self.bookId, )
+            url = "https://book.douban.com/subject/%s/" % (self.bookId,)
             catchRecordItem = {
                 'book_id': self.bookId,
                 'url': url,
@@ -76,7 +77,7 @@ class BookDetailSpiderThread(threading.Thread):
                     print "请求通过"
                     print "开始解析"
                     # 解析文档
-                    self.bookDetailDao.start(response.text,url,book_id)
+                    self.bookDetailDao.start(response.text, url, book_id)
             else:
                 print "没有ip了，等", "不改变参数"
                 raise requests.exceptions.ProxyError("")
@@ -130,6 +131,6 @@ class BookDetailSpiderThread(threading.Thread):
                 print "没有新的IP"
 
 
-#
-# book =BookListSpider()
-# book.request("https://book.douban.com/tag/小说?start=760&type=T")
+                #
+                # book =BookListSpider()
+                # book.request("https://book.douban.com/tag/小说?start=760&type=T")
