@@ -122,7 +122,7 @@ class BookDetailSpiderThread(threading.Thread):
             #     print "新的ip:", self.ipValid
             # else:
             #     print "数据库中没有新的IP"
-            if self.bookId % 5 == 0:
+            if self.bookId % 3 == 0:
                 self.ipValid = self.getIpFromXici.getIp()
             else:
                 self.ipValid = IPDao().getOneIp()
