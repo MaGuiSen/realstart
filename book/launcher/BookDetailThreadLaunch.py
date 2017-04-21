@@ -48,6 +48,7 @@ class BookDetailThreadLaunch(object):
                 self.threadList.append(thread_)
                 bookId += 1
                 self.log.saveBookDetailThreadLaunchIndex(bookId)
+            time.sleep(1)
 
     def checkNeedAddThread(self):
         for currThread in self.threadList:
