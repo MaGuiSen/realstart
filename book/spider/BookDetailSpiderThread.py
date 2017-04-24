@@ -28,6 +28,7 @@ class BookDetailSpiderThread(threading.Thread):
         self.getIpFromXici = GetIpFromXici()
         self.bookCatchRecordDao = BookCatchRecordDao()
         self.bookId = bookId
+        self.isIpWayChange = False;
         pass
 
     def run(self):
@@ -122,9 +123,11 @@ class BookDetailSpiderThread(threading.Thread):
             #     print "新的ip:", self.ipValid
             # else:
             #     print "数据库中没有新的IP"
-            if self.bookId % 3 == 0:
+            if self.isIpWayChange:
+                self.isIpWayChange = False;
                 self.ipValid = self.getIpFromXici.getIp()
             else:
+                self.isIpWayChange = True;
                 self.ipValid = IPDao().getOneIp()
 
             if self.ipValid and len(self.ipValid) >= 2:
