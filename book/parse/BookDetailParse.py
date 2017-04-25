@@ -12,9 +12,8 @@ class BookDetailParse(object):
     书籍列表解析
     """
 
-    def __init__(self):
-        pass
-        self.bookDetailDao = BookDetailDao()
+    def __init__(self, connector):
+        self.bookDetailDao = BookDetailDao(connector)
         self.index = 0
 
     def start(self, html, source_url, book_id):

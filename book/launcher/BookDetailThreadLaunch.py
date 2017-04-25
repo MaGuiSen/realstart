@@ -5,6 +5,7 @@ import threading
 import time
 
 from book import Global
+from book.db.DBDao import DBDao
 from book.log.Log import Log
 from book.spider.BookDetailSpiderThread import BookDetailSpiderThread
 
@@ -28,6 +29,7 @@ class BookDetailThreadLaunch(object):
         self.threadList = []
         self.threadMaxSize = 15
         self.log = Log()
+        # self.connector =
 
     def start(self):
         # 启动输入线程
@@ -43,7 +45,7 @@ class BookDetailThreadLaunch(object):
             self.checkNeedAddThread()
             while not Global.consoleToStopCatch and len(self.threadList) <= self.threadMaxSize:
                 print bookId
-                thread_ = BookDetailSpiderThread(bookId)
+                thread_ = BookDetailSpiderThread(bookId, DBDao().getConnector())
                 thread_.start()
                 self.threadList.append(thread_)
                 bookId += 1
@@ -54,6 +56,7 @@ class BookDetailThreadLaunch(object):
         for currThread in self.threadList:
             if not currThread.isAlive():
                 print "dead:" + str(currThread.bookId)
+                currThread.connector.close()
                 self.threadList.remove(currThread)
         # 看还需要增加几个
         return self.threadMaxSize - len(self.threadList)

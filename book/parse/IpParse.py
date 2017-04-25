@@ -7,10 +7,10 @@ from book.util.validator import checkProxyIp_1
 class IpParse(object):
     """
     """
-    def __init__(self):
+    def __init__(self, connector):
         pass
         self.index = 0
-        self.ipDao = IPDao()
+        self.ipDao = IPDao(connector)
 
     def start(self, html):
         page = BeautifulSoup(html, 'lxml')

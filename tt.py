@@ -1,3 +1,10 @@
 # -*- coding: utf-8 -*-
+import mysql
 
-myName = '123'
+try:
+    try:
+        raise Exception()
+    except mysql.connector.errors.InterfaceError:
+        print 'aaa'
+except :
+    print 'dddd'

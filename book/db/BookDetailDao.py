@@ -11,10 +11,8 @@ class BookDetailDao(object):
     IP数据库操作
     """
 
-    def __init__(self):
-        self.configPath = os.path.join(os.path.dirname(__file__) + "/config/db_config_inner.ini")
-        self.dbconfig = cu.read_db_config(self.configPath)
-        self.connector = MySQLConnection(charset='utf8', **self.dbconfig)
+    def __init__(self, connector):
+        self.connector = connector
 
     def checkExist(self, bookId):
         cursor = self.connector.cursor()

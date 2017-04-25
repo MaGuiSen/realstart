@@ -8,8 +8,8 @@ from selenium import webdriver
 
 
 class IpSpider_4(object):
-    def __init__(self):
-        pass
+    def __init__(self, connector):
+        self.connector = connector
 
     def start(self, url):
         self.request(url)
@@ -24,7 +24,7 @@ class IpSpider_4(object):
                 print "请求通过"
                 print "IpSpider_4开始解析"
                 # 解析文档
-                IpParse_4().start(page)
+                IpParse_4(self.connector).start(page)
             else:
                 print "没有数据"
         except requests.exceptions.ConnectTimeout, e:

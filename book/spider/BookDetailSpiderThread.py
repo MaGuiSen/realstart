@@ -16,19 +16,21 @@ from book.util.GetIpFromXici import GetIpFromXici
 
 
 class BookDetailSpiderThread(threading.Thread):
-    def __init__(self, bookId):
+    def __init__(self, bookId, connector):
         threading.Thread.__init__(self)
         self.needNextUrl = False
         self.ipValid = None
         self.currPage = 0
-        self.ipDao = IPDao()
+        self.ipDao = IPDao(connector)
         self.log = Log()
         self.canOverCatch = True  # 是否需要更换参数，在服务器异常的时候不需要更换，保持原有参数
-        self.bookDetailDao = BookDetailParse()
+        self.bookDetailDao = BookDetailParse(connector)
         self.getIpFromXici = GetIpFromXici()
-        self.bookCatchRecordDao = BookCatchRecordDao()
+        self.bookCatchRecordDao = BookCatchRecordDao(connector)
         self.bookId = bookId
-        self.isIpWayChange = False;
+        self.isIpWayChange = False
+        self.connector = connector
+        self.isException = False
         pass
 
     def run(self):
@@ -42,16 +44,24 @@ class BookDetailSpiderThread(threading.Thread):
             }
             print str(self.bookId) + ">" + url
             if not self.bookCatchRecordDao.checkExist(self.bookId):
-                self.bookCatchRecordDao.save(catchRecordItem)
-            self.request(url, self.bookId)
-            time.sleep(int(format(random.randint(0, 1))))
-            if self.canOverCatch:
-                # 说明成功了，就需要跳出
-                # 删除数据库 记录
-                self.bookCatchRecordDao.deleteById(self.bookId)
+                 self.bookCatchRecordDao.save(catchRecordItem)
+            try:
+                self.request(url, self.bookId)
+                time.sleep(int(format(random.randint(0, 1))))
+                if self.canOverCatch:
+                    # 说明成功了，就需要跳出
+                    # 删除数据库 记录
+                    self.bookCatchRecordDao.deleteById(self.bookId)
+                    break
+                self.canOverCatch = True
+            except:
+                # 其他错误，就直接跳过
+                self.isException = True
                 break
-            self.canOverCatch = True
-        print "success>" + str(self.bookId) + ">" + url
+        if self.isException:
+            print "error_out>" + str(self.bookId) + ">" + url
+        else:
+            print "success>" + str(self.bookId) + ">" + url
 
     def request(self, url, book_id):
         user_agent = random.choice(Constant.USER_AGENTS)
@@ -128,7 +138,7 @@ class BookDetailSpiderThread(threading.Thread):
                 self.ipValid = self.getIpFromXici.getIp()
             else:
                 self.isIpWayChange = True;
-                self.ipValid = IPDao().getOneIp()
+                self.ipValid = IPDao(self.connector).getOneIp()
 
             if self.ipValid and len(self.ipValid) >= 2:
                 print str(self.bookId) + u">新的ip:", self.ipValid

@@ -8,8 +8,8 @@ from selenium import webdriver
 
 
 class IpSpider_2(object):
-    def __init__(self):
-        pass
+    def __init__(self, connector):
+        self.connector = connector
 
     def start(self):
         self.request("http://www.xdaili.cn/freeproxy.html")
@@ -24,7 +24,7 @@ class IpSpider_2(object):
                 print "请求通过"
                 print "IpSpider_2开始解析"
                 # 解析文档
-                IpParse_2().start(page)
+                IpParse_2(self.connector).start(page)
             else:
                 print "没有数据"
         except requests.exceptions.ConnectTimeout, e:

@@ -8,8 +8,8 @@ from selenium import webdriver
 
 
 class IpSpider_8(object):
-    def __init__(self):
-        pass
+    def __init__(self, connector):
+        self.connector = connector
 
     def start(self, url):
         self.request(url)
@@ -29,7 +29,7 @@ class IpSpider_8(object):
                 print "请求通过"
                 print "开启IP8抓取 开始解析"
                 # 解析文档
-                IpParse_8().start(response.text)
+                IpParse_8(self.connector).start(response.text)
         except requests.exceptions.ConnectTimeout, e:
             print "超時"
         except requests.exceptions.ProxyError, e:

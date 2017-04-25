@@ -7,8 +7,8 @@ from book.parse.IpParse import IpParse
 
 
 class IpSpider(object):
-    def __init__(self):
-        pass
+    def __init__(self, connector):
+        self.connector = connector
 
     def start(self):
         self.request("http://www.xicidaili.com/")
@@ -28,7 +28,7 @@ class IpSpider(object):
                 print "请求通过"
                 print "IpSpider 开始解析"
                 # 解析文档
-                IpParse().start(response.text)
+                IpParse(self.connector).start(response.text)
         except requests.exceptions.ConnectTimeout, e:
             print "超時"
         except requests.exceptions.ProxyError, e:
