@@ -38,8 +38,8 @@ class BookDetailParse(object):
             img_douban = ""
         img_name = str(time.time()).replace('.', '')
         img_self = "/book_img/" + str(book_id) + "_" + img_name + '.jpg'
-        # 开线程下载
-        FileDownLoadThread(book_id, img_self, img_douban).start()
+        # # 开线程下载 暂时不下载图片
+        # FileDownLoadThread(book_id, img_self, img_douban).start()
         # 根据图片进行下载
         score = soup.select("div.grid-16-8 div.rating_wrap ")  # 评分
         if score and len(score) > 0:

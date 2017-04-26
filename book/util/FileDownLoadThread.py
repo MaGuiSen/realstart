@@ -14,7 +14,7 @@ class FileDownLoadThread(threading.Thread):
 
     def run(self):
         try:
-            fileResponse = requests.get(self.loadUrl)
+            fileResponse = requests.get(self.loadUrl, timeout=5)
             req_code = fileResponse.status_code
             req_msg = fileResponse.reason
             print "图片下载返回状态 ", req_code, " 返回状态消息 ", req_msg
