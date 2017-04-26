@@ -45,11 +45,14 @@ class BookDetailThreadLaunch(object):
             self.checkNeedAddThread()
             while not Global.consoleToStopCatch and len(self.threadList) <= self.threadMaxSize:
                 print bookId
-                thread_ = BookDetailSpiderThread(bookId, DBDao().getConnector())
-                thread_.start()
-                self.threadList.append(thread_)
-                bookId += 1
-                self.log.saveBookDetailThreadLaunchIndex(bookId)
+                try:
+                    thread_ = BookDetailSpiderThread(bookId, DBDao().getConnector())
+                    thread_.start()
+                    self.threadList.append(thread_)
+                    bookId += 1
+                    self.log.saveBookDetailThreadLaunchIndex(bookId)
+                except:
+                    pass
             time.sleep(1)
 
     def checkNeedAddThread(self):

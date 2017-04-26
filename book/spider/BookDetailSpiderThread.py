@@ -34,14 +34,14 @@ class BookDetailSpiderThread(threading.Thread):
         pass
 
     def run(self):
+        url = "https://book.douban.com/subject/%s/" % (self.bookId,)
+        # 记录抓第几条
+        catchRecordItem = {
+            'book_id': self.bookId,
+            'url': url,
+            'catch_status': 'catching',
+        }
         while not Global.consoleToStopCatch:
-            # 记录抓第几条
-            url = "https://book.douban.com/subject/%s/" % (self.bookId,)
-            catchRecordItem = {
-                'book_id': self.bookId,
-                'url': url,
-                'catch_status': 'catching',
-            }
             print str(self.bookId) + ">" + url
             if not self.bookCatchRecordDao.checkExist(self.bookId):
                  self.bookCatchRecordDao.save(catchRecordItem)
