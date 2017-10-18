@@ -1,5 +1,7 @@
 # -*- coding: utf-8 -*-
 import os
+import random
+
 from mysql.connector import MySQLConnection
 import book.db.config.configutils as cu
 from book.util.validator import checkProxyIp_1
@@ -14,11 +16,12 @@ class IPDao(object):
 
     def getOneIp(self):
         cursor = self.connector.cursor()
-        sql_query = 'select ip,port from ip_address order by id desc limit 1'
+        sql_query = 'select ip,port from ip_address order by id desc limit 10'
         cursor.execute(sql_query)
         results = cursor.fetchall()
         cursor.close()
         if results and len(results) > 0:
+            random.shuffle(results)
             return results[0]
         else:
             return None

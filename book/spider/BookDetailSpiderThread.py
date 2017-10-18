@@ -133,12 +133,12 @@ class BookDetailSpiderThread(threading.Thread):
             #     print "新的ip:", self.ipValid
             # else:
             #     print "数据库中没有新的IP"
-            if self.isIpWayChange:
-                self.isIpWayChange = False;
-                self.ipValid = self.getIpFromXici.getIp()
-            else:
-                self.isIpWayChange = True;
-                self.ipValid = IPDao(self.connector).getOneIp()
+            # if self.isIpWayChange:
+            #     self.isIpWayChange = False;
+            #     self.ipValid = self.getIpFromXici.getIp()
+            # else:
+            self.isIpWayChange = True;
+            self.ipValid = IPDao(self.connector).getOneIp()
 
             if self.ipValid and len(self.ipValid) >= 2:
                 print str(self.bookId) + u">新的ip:", self.ipValid

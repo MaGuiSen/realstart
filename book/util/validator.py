@@ -11,7 +11,7 @@ def checkProxyIp_1(ip='', port='', connect_url=''):
     :param port:
     :param connect_url: 测试连接地址
     :return:
-    测试路径http://wwww.baidu.com
+    测试路径http://www.baidu.com
     """
     try:
         start_time = time.time()

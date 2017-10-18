@@ -28,5 +28,5 @@ class FileDownLoadThread(threading.Thread):
             print self.book_id, "图片下载出错Exception", self.loadUrl
 
 
-# thread1 = FileDownLoadThread(1, "/book_img/123.jpg", "https://img3.doubanio.com/lpic/s29385675.jpg")
-# thread1.start()
+thread1 = FileDownLoadThread(1, "/book_img/12222222.jpg", "http://27.154.228.202:8081/Anonymous/GetFile.aspx?SaveFolder=UploadFolder&SaveFullName=47719c54-861c-4e53-b371-d00e06b92999.jpg")
+thread1.start()
